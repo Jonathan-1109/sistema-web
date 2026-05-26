@@ -1,0 +1,31 @@
+# SISTEMA WEB DE LOGÍSTICA Y OPTIMIZACIÓN 
+
+1. Módulo Interactivo de Transporte (Cadena de Suministro) 
+2. Módulo Interactivo de Asignación (Gestión de Talento)
+3. Integración de la API de Groq y Reporte PDF Dinámico 
+
+## Pasos
+
+### Clonar repositorio
+```bash
+git clone https://github.com/Jonathan-1109/sistema-web.git
+```
+### Servidor fastapi
+
+#### 1. Crear el entorno virtual
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate #linux/mac
+.venv\Scripts\activate #windows
+```
+
+### 2. Instalar dependencias
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 3. Generar una apikey 
+Crea y obten una apikey en [GroqCloud](https://console.groq.com/) y crea un archivo .env en la raiz del proyecto, usando de ejemplo el .env.example
