@@ -19,7 +19,7 @@ async def methods_operations(method: ValidMethods, chain: Chain):
               mc = minimun_cost_method(matrix,offers,demands)
               mc.resolve_minimun_cost()
 
-            case "nortwest corner":
+            case "esquina noroeste":
               methodValue = "Esquina noroeste"
               mc = nortwest_corner_method(matrix,offers,demands)
               mc.resolve_nortwest()  
@@ -37,7 +37,6 @@ async def methods_operations(method: ValidMethods, chain: Chain):
             conclusion = rpt if rpt is not None else "Error al generar la conclusión con Groq"
 
         response = ResponseChain(
-          status_code=status.HTTP_200_OK,
           message="Ejercicio resuelto", 
           logs=mc.logs,
           values=mc.values,
@@ -47,15 +46,6 @@ async def methods_operations(method: ValidMethods, chain: Chain):
 
         return response
     
-    except ValueError as ve:
-        response = ResponseChain(
-          status_code=status.HTTP_400_BAD_REQUEST,
-          message=ve, 
-        ).model_dump()
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Ha habido un error en el servidor al realizar la operación")
 
-        return response
-    
-    except HTTPException as he:
-       return he
-    
-  

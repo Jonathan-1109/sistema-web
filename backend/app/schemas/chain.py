@@ -43,7 +43,6 @@ class Chain(BaseModel):
         return self
     
 class ResponseChain(BaseModel):
-    status_code: int
     message: str
     logs: dict | None = None
     values: list | None = None
