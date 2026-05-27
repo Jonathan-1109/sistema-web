@@ -13,10 +13,11 @@ async def methods_operations(groq_message: groqMessage):
         destinations=groq_message.destinations,
         extraContext=groq_message.extraContext,
         matrix=groq_message.matrix,
-        method=groq_message.methodUsed,
+        method=groq_message.method,
         offers=groq_message.offers,
         origins=groq_message.origins,
-        result=groq_message.result)
+        result=groq_message.result,
+        values=groq_message.values)
         
     if rpt is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Ha habido un error al crear la conclusión con groq")
@@ -27,4 +28,3 @@ async def methods_operations(groq_message: groqMessage):
     ).model_dump()
 
     return response
-

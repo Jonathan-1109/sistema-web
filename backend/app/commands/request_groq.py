@@ -13,26 +13,29 @@ class request_groq:
     matrix: list[list[float]],
     balanced: bool,
     result: float,
-    extraContext: str | None,
-    offers: list[float] | None,
-    demands: list[float] | None) -> str | None:
+    offers: list[float],
+    demands: list[float],
+    values: list[float],
+    extraContext: str | None
+    ) -> str | None:
 
-        user_content = f"""Analiza el siguiente problema de transporte resuelto por el metodo de {method} y proporciona una conclusión académica estructurada.
+        user_content = f"""Analiza el siguiente problema de transporte resuelto por el metodo de {method.value} y proporciona una conclusión académica estructurada.
 
         DATOS DEL PROBLEMA:
-        - Método utilizado: {method}
-        - Matriz de costos (filas={origins}, columnas={destinations}): {matrix}
-        {"- Ofertas por origen: " + ", ".join(str(v) for v in offers) if method != "Hungaro" else ""}
-        {"- Demandas por destino: " + ", ".join(str(v) for v in demands) if method != "Hungaro" else ""}
-        {("- Problema balanceado: " + "si" if balanced else "No (se agregó variable ficticia con costo 0)") if method != "Hungaro" else ""}
+        - Método utilizado: {method.value}
+        - Matriz de costos (filas={destinations}, columnas={origins}): {matrix}
+        - Ofertas por origen: {", ".join(str(v) for v in offers)}
+        - Demandas por destino:  {", ".join(str(v) for v in demands)}
+        - Problema balanceado: {"si" if balanced else "No (se agregó variable ficticia con costo 0)"}
 
         RESULTADO OBTENIDO: {result}
+        - Valores para obtener el resultado: {values}
 
-        Por favor, estructura tu respuesta con estas secciones (máximo 200 palabras en total):
-        1. **Resumen del procedimiento**: Describe brevemente cómo funciona el Método de {method} y cómo se aplicó.
+        Por favor, estructura tu respuesta con estas secciones (máximo 250 palabras en total):
+        1. **Resumen del procedimiento**: Describe brevemente cómo funciona el Método de {method.value} y cómo se aplicó.
         2. **Interpretación del resultado**: Explica qué significa el costo total de {result} en el contexto del problema.
-        3. **Calidad de la solución**: Indica si esta es una solución óptima o una solución factible inicial (básica)."""
-
+        3. **Calidad de la solución**: Indica si esta es una solución óptima o una solución factible inicial (básica).
+        4. **Observaciones adicionales**: Menciona si el problema estaba balanceado y cualquier aspecto relevante."""
         {"Informacion adicional: " + extraContext if extraContext is not None else ""}
 
         conclusion = groq_conclusion(self.client, user_content)
