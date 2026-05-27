@@ -1,4 +1,10 @@
 from pydantic import BaseModel, model_validator
+from enum import Enum
+
+class ValidMethods(str, Enum):
+    minimun_cost = "costo minimo"
+    nortwest_corner = "esquina noroeste"
+    vogel = "vogel"
 
 class Chain(BaseModel):
     matrix: list[list[float]]
@@ -37,7 +43,7 @@ class Chain(BaseModel):
         return self
     
 class ResponseChain(BaseModel):
-    statusCode: int
+    status_code: int
     message: str
     logs: dict | None = None
     values: list | None = None
