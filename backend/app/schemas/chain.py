@@ -1,26 +1,26 @@
 from pydantic import BaseModel, model_validator
+from fastapi import HTTPException
 from enum import Enum
 
 class ValidMethods(str, Enum):
-    minimun_cost = "costo minimo"
-    nortwest_corner = "esquina noroeste"
+    minimum_cost = "costo_minimo"
+    nortwest_corner = "esquina_noroeste"
     vogel = "vogel"
 
 class Chain(BaseModel):
     matrix: list[list[float]]
     offers: list[float]
     demands: list[float]
-    groq: bool = False
     balanced: bool = False
 
     @model_validator(mode="after")
     def check_dimensions(self):
 
         if (len(self.matrix[0]) != len(self.demands) or len(self.matrix) != len(self.offers)):
-            raise ValueError("El tamaño de la matriz de datos es distinto al tamaño de ofertas o demandas")
+            raise HTTPException(status_code=422, detail="El tamaño de la matriz de datos es distinto al tamaño de ofertas o demandas")
     
         if not all(len(fila) == len(self.matrix[0]) for fila in self.matrix):
-            raise ValueError("El tamaño de la matriz es irregular")
+            raise HTTPException(status_code=422, detail="El tamaño de la matriz es irregular")
                 
         return self
 
@@ -28,8 +28,6 @@ class Chain(BaseModel):
     def balance(self):
         dem_total = sum(self.demands)
         off_total = sum(self.offers)
-
-        self.balanced = dem_total == off_total
 
         if dem_total > off_total:
             self.offers.append(dem_total-off_total)
@@ -47,4 +45,3 @@ class ResponseChain(BaseModel):
     logs: dict | None = None
     values: list | None = None
     result: int | None = None
-    conclusionGroq: str | None = None

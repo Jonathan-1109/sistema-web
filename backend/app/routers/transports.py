@@ -8,40 +8,30 @@ router = APIRouter(prefix="/transport")
     
 @router.post("/{method}")
 async def methods_operations(method: ValidMethods, chain: Chain):
-    matrix, demands, offers, groq = chain.matrix, chain.demands, chain.offers, chain.groq
-    conclusion = ""
-    methodValue = ""
+    matrix, demands, offers = chain.matrix, chain.demands, chain.offers
     mc = None
     try:   
         match method:
-            case "costo minimo":
-              methodValue = "Costo minimo"
+            case "costo_minimo":
               mc = minimun_cost_method(matrix,offers,demands)
               mc.resolve_minimun_cost()
 
-            case "esquina noroeste":
-              methodValue = "Esquina noroeste"
+            case "esquina_noroeste":
               mc = nortwest_corner_method(matrix,offers,demands)
               mc.resolve_nortwest()  
 
             case "vogel":
-              methodValue = "Aproximación de vogel"
               mc = vogel_approximation_method(matrix,offers,demands)
               mc.resolve_vogel()
 
             case _:
               raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="El metodo buscado es invalido")
   
-        if groq:
-            rpt = mc.groq_promt(methodValue, chain.balanced)
-            conclusion = rpt if rpt is not None else "Error al generar la conclusión con Groq"
-
         response = ResponseChain(
           message="Ejercicio resuelto", 
           logs=mc.logs,
           values=mc.values,
           result=mc.result,
-          conclusionGroq=conclusion
         ).model_dump()
 
         return response
