@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Request, HTTPException, Depends, status
+from fastapi import FastAPI
+from .routers.transports import router
+from dotenv import load_dotenv
 
-app = FastAPI(title="API")
+load_dotenv()
 
-@app.get("/")
-async def root():
-    return {"hello": "world"}
+app = FastAPI(title="Nexuscore systems API")
+app.include_router(router)
