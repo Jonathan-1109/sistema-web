@@ -1,10 +1,11 @@
 class hungarian_method:
     def __init__(self, matrix):
         self.matrix: list[list[float]] = matrix
-        self.logs = {}
+        self.log = {}
         self.clone: list[list[float]] = [fila[:] for fila in matrix]
-        self.pos: list[list[float]] = [] 
+        self.pos: list[list[int]] = [] 
         self.values: list[float] = [] 
+        self.result = 0
 
     def resolve_hungarian(self):
 
@@ -18,7 +19,7 @@ class hungarian_method:
                 self.matrix[i][j] -=  minor
             minorsRows.append(minor)
         
-        self.logs["step1"] = {"matrix": self.matrix, "minorsRows": minorsRows}
+        self.log["step1"] = {"matrix": self.matrix, "minorsRows": minorsRows}
 
         for i in range(m):
             minor = self.matrix[0][i]
@@ -30,7 +31,7 @@ class hungarian_method:
                 self.matrix[j][i] -=  minor
             minorsCols.append(minor)
         
-        self.logs["step2"] = {"matrix": self.matrix, "minorsCols": minorsCols}
+        self.log["step2"] = {"matrix": self.matrix, "minorsCols": minorsCols}
         
         rows_covers = [False for i in range(m)]
         cols_covers = [False for i in range(m)]
@@ -48,8 +49,8 @@ class hungarian_method:
             cont += 1
         
         self._assignment()
-        result = sum(self.values)
-        self.logs["final"] = {"matrix": self.matrix, "values": self.values, "positions": self.pos, "result": result}
+        self.result = sum(self.values)
+        self.log["final"] = {"matrix": self.matrix}
         
     def _cover_zeros(self, rows_covers, cols_covers):
         n = len(self.matrix)
@@ -107,4 +108,4 @@ class hungarian_method:
     def update_log(self, n:int, rc: list[bool], cc: list[bool]):
         key = f"iter{n+1}"
         dictLog = {key:{"matrix":self.matrix, "rowsCovers": rc, "colsCovers": cc}}
-        self.logs.update(dictLog)
+        self.log.update(dictLog)

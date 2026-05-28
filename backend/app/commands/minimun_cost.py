@@ -8,8 +8,7 @@ class minimun_cost_method(transport):
     def resolve_minimun_cost(self):
         cont = 0
 
-        while True:
-
+        while cont < 20:
             minimun = float('inf')
             x = 0
             y = 0

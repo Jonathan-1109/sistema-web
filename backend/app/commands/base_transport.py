@@ -1,6 +1,5 @@
 import os
 from groq import Groq
-from ..utils.groq_conclusion import groq_conclusion
 
 class transport:
 
@@ -14,7 +13,7 @@ class transport:
 
         self.values = []
         self.result = 0
-        self.logs = {}
+        self.log = {}
 
     def save_matrix(self, value_of_dem: float, value: float, x: int, y: int, n: int) -> None :
 
@@ -22,8 +21,8 @@ class transport:
         newDict = {
             key:{"matrix": [fila[:] for fila in self.matrix], 
                 "demands": self.demands[:], "offers": self.offers[:], 
-                "minimun":value, "offerDemand":value_of_dem, 
+                "minimun":value, "assign":value_of_dem,
                 "x":x, "y":y}
             }
-        self.logs.update(newDict)
+        self.log.update(newDict)
         

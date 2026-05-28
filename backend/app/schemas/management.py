@@ -1,19 +1,14 @@
 from pydantic import BaseModel, model_validator
-from fastapi import HTTPException
+from ..utils.errors import check_matrix_management
 
 class Management(BaseModel):
     matrix: list[list[float]]
 
-    @model_validator(mode="after")
-    def check_matrix(self):
-        if len(self.matrix) != len(self.matrix[0]):
-            raise HTTPException(status_code=422, detail="La matriz tiene que tener la misma cantidad de filas y columnas (MxM)")
-        
-        if not all(len(fila) == len(self.matrix[0]) for fila in self.matrix):
-            raise HTTPException(status_code=422, detail="El tamaño de la matriz es irregular")
-                
-        return self
+    _check = model_validator(mode="after")(check_matrix_management)
     
 class ResponseManagement(BaseModel):
     message: str
-    logs: dict | None = None
+    log: dict | None = None
+    values: list[float] | None = None
+    positions: list[list[int]] | None = None
+    result: float | None = None

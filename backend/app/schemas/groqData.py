@@ -1,6 +1,6 @@
 from pydantic import BaseModel, model_validator
 from enum import Enum
-from fastapi import HTTPException
+from ..utils.errors import check_dimensions, check_matrix_management, check_orgDes
 
 class groqValidMethods(str, Enum):
     minimum_cost = "costo_minimo"
@@ -16,22 +16,33 @@ class groqMessage(BaseModel):
     offers: list[float]
     demands: list[float]
     balanced: bool = False
+    log: dict
     result: float
     values: list[float]
 
-    @model_validator(mode="after")
-    def check_methods(self):
-            
-        if (len(self.matrix[0]) != len(self.demands) or len(self.matrix) != len(self.offers)):
-            raise HTTPException(status_code=422, detail="El tamaño de la matriz de datos es distinto al tamaño de ofertas o demandas")
+    _check = model_validator(mode="after")(check_dimensions)
+    _check_orgDes = model_validator(mode="after")(check_orgDes)
     
-        if not all(len(fila) == len(self.matrix[0]) for fila in self.matrix):
-            raise HTTPException(status_code=422, detail="El tamaño de la matriz es irregular")
-            
-        self.balanced = sum(self.offers) == sum(self.demands) 
-                
+    @model_validator(mode="after")
+    def balance(self):
+        self.balanced = sum(self.offers) == sum(self.demands)
         return self
     
+
+class groqHungarian(BaseModel):
+    origins: str | list[str]
+    destinations: str | list[str]
+    extraContext: str | None = None
+    matrix: list[list[float]]
+    log: dict
+    result: float
+    values: list[float]
+    positions: list[list[int]]
+
+    _check = model_validator(mode="after")(check_matrix_management)
+    _check_orgDes = model_validator(mode="after")(check_orgDes)
+
+
 class groqAnswer(BaseModel):
     message: str
     conclusionGroq: str | None = None

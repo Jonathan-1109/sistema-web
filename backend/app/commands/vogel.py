@@ -76,5 +76,5 @@ class vogel_approximation_method(transport):
 
     def save_matrix(self, value1, value2, n, x, y, row_penalties, colt_penalties):
         super().save_matrix(value1, value2, x, y, n)
-        self.logs[f"iter{n + 1}"][f"penaltiesRows"] = row_penalties
-        self.logs[f"iter{n + 1}"][f"penaltiesColt"] = colt_penalties
+        self.log[f"iter{n + 1}"][f"penaltiesRows"] = row_penalties
+        self.log[f"iter{n + 1}"][f"penaltiesColt"] = colt_penalties

@@ -29,9 +29,10 @@ async def methods_operations(method: ValidMethods, chain: Chain):
   
         response = ResponseChain(
           message="Ejercicio resuelto", 
-          logs=mc.logs,
+          log=mc.log,
           values=mc.values,
           result=mc.result,
+          balanced=chain.balanced
         ).model_dump()
 
         return response

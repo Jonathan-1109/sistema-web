@@ -12,7 +12,10 @@ async def hungarian(mng: Management):
         mc.resolve_hungarian()
         response = ResponseManagement(
           message="Ejercicio resuelto", 
-          logs=mc.logs,
+          log=mc.log,
+          values=mc.values, 
+          positions=mc.pos, 
+          result=mc.result
         ).model_dump()
 
         return response

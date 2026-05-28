@@ -1,8 +1,7 @@
 import groq
 
-SYSTEM_PROMPT = """Eres un asistente académico especializado en Investigación de Operaciones, 
-específicamente en problemas de transporte y logística. Tu rol es analizar resultados 
-de métodos de transporte o de asignación y generar conclusiones académicas claras, precisas y en español."""
+SYSTEM_PROMPT = """Eres un director de operaciones (COO),  específicamente en problemas de asignación, transporte y logística. 
+Tu rol es analizar resultados de métodos de transporte o de asignación y generar conclusiones académicas claras, precisas y en español."""
 
 def groq_conclusion(client: groq.Groq, content: str) -> str | None:
     messages = []
@@ -16,7 +15,7 @@ def groq_conclusion(client: groq.Groq, content: str) -> str | None:
             messages=messages,
             model="llama-3.3-70b-versatile",
             temperature=0.4,
-            max_tokens=600,
+            max_tokens=650,
             timeout=10.0,
         )
         return chat_completion.choices[0].message.content

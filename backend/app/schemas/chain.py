@@ -1,5 +1,5 @@
 from pydantic import BaseModel, model_validator
-from fastapi import HTTPException
+from ..utils.errors import check_dimensions
 from enum import Enum
 
 class ValidMethods(str, Enum):
@@ -13,21 +13,13 @@ class Chain(BaseModel):
     demands: list[float]
     balanced: bool = False
 
-    @model_validator(mode="after")
-    def check_dimensions(self):
-
-        if (len(self.matrix[0]) != len(self.demands) or len(self.matrix) != len(self.offers)):
-            raise HTTPException(status_code=422, detail="El tamaño de la matriz de datos es distinto al tamaño de ofertas o demandas")
-    
-        if not all(len(fila) == len(self.matrix[0]) for fila in self.matrix):
-            raise HTTPException(status_code=422, detail="El tamaño de la matriz es irregular")
-                
-        return self
+    _check = model_validator(mode="after")(check_dimensions)
 
     @model_validator(mode="after")
     def balance(self):
         dem_total = sum(self.demands)
         off_total = sum(self.offers)
+        self.balanced = dem_total == off_total
 
         if dem_total > off_total:
             self.offers.append(dem_total-off_total)
@@ -42,6 +34,7 @@ class Chain(BaseModel):
     
 class ResponseChain(BaseModel):
     message: str
-    logs: dict | None = None
+    log: dict | None = None
     values: list | None = None
     result: int | None = None
+    balanced: bool | None = None
