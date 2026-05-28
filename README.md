@@ -31,4 +31,6 @@ pip install -r requirements.txt
 Crea y obten una apikey en [GroqCloud](https://console.groq.com/) y crea un archivo .env en el backend, usando de ejemplo el .env.example
 
 #### 4. Iniciar el servidor
+```bash
 fastapi dev app/main.py
+```
