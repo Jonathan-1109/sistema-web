@@ -11,9 +11,6 @@ class transport:
         self.matrix = matrix
         self.offers = offers
         self.demands = demands
-        self.clone_matrix = [fila[:] for fila in matrix]
-        self.clone_offers = offers[:]
-        self.clone_demands = demands[:]
 
         self.values = []
         self.result = 0

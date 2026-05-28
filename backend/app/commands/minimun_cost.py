@@ -10,7 +10,7 @@ class minimun_cost_method(transport):
 
         while True:
 
-            minimun = self.matrix[0][0]
+            minimun = float('inf')
             x = 0
             y = 0
 
