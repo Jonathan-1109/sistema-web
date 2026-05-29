@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Asignación - Método Húngaro</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+            @bottom-right {
+                content: "Página " counter(page) " de " counter(pages);
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #718096;
+            }
+            @bottom-left {
+                content: "Optimización de Asignación — Método Húngaro";
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #718096;
+            }
+        }
+        
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #2d3748;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            font-size: 10pt;
+        }
+
+        /* Banner Principal */
+        .header-banner {
+            margin: -20mm -15mm 25px -15mm;
+            padding: 25px 15px;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: #ffffff;
+        }
+        
+        .header-banner h1 {
+            margin: 0 0 8px 0;
+            font-size: 20pt;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        
+        .header-banner p {
+            margin: 0;
+            font-size: 10pt;
+            color: #ecf0f1;
+            opacity: 0.9;
+        }
+
+        /* Cuadrícula de Información */
+        .meta-grid {
+            display: table;
+            width: 100%;
+            margin-bottom: 25px;
+            background-color: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            border-collapse: separate;
+        }
+        
+        .meta-row {
+            display: table-row;
+        }
+        
+        .meta-cell {
+            display: table-cell;
+            padding: 12px 15px;
+            vertical-align: top;
+            width: 50%;
+        }
+        
+        .meta-cell:first-child {
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .meta-label {
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #718096;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .meta-value {
+            font-size: 11pt;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 14pt;
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 12px;
+            padding-left: 8px;
+            border-left: 4px solid #3498db;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 11pt;
+            color: #4a5568;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            page-break-after: avoid;
+        }
+
+        /* Estilos de Matrices */
+        .matrix-container {
+            margin: 15px 0 25px 0;
+            page-break-inside: avoid;
+        }
+
+        table.matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            font-size: 10pt;
+        }
+
+        table.matrix-table th {
+            background-color: #34495e;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 8px 10px;
+            border: 1px solid #2c3e50;
+            text-align: center;
+        }
+
+        table.matrix-table td {
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            text-align: center;
+        }
+
+        /* Fila o columna cubierta/tachada */
+        table.matrix-table tr.row-covered td {
+            background-color: #edf2f7;
+            text-decoration: line-through;
+            color: #a0aec0;
+        }
+
+        table.matrix-table td.col-covered {
+            background-color: #edf2f7;
+            text-decoration: line-through;
+            color: #a0aec0;
+        }
+
+        /* Celda de asignación final elegida */
+        table.matrix-table td.assigned-cell {
+            background-color: #e6fffa !important;
+            border: 2px solid #319795 !important;
+            font-weight: bold;
+            color: #234e52;
+        }
+
+        table.matrix-table .side-val {
+            background-color: #edf2f7;
+            font-weight: bold;
+            color: #4a5568;
+            font-size: 9pt;
+        }
+
+        /* Contenedores de Pasos */
+        .step-block {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        .step-header {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 11pt;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Conclusión */
+        .conclusion-box {
+            background-color: #f0fff4;
+            border-left: 5px solid #38a169;
+            padding: 18px;
+            border-radius: 0 6px 6px 0;
+            margin-top: 30px;
+            page-break-inside: avoid;
+        }
+
+        .result-highlight {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #276749;
+            background-color: #ffffff;
+            padding: 8px 15px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 15px;
+            border: 1px solid #c6f6d5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-banner">
+        <h1>Reporte de Resolución Algorítmica</h1>
+        <p>Método Húngaro para Modelos de Asignación Optimizada</p>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-row">
+            <div class="meta-cell">
+                <div class="meta-label">Dimensión del Problema</div>
+                <div class="meta-value">Matriz Cuadrada {{ matrix|length }} &times; {{ matrix|length }}</div>
+            </div>
+            <div class="meta-cell">
+                <div class="meta-label">Asignaciones Realizadas</div>
+                <div class="meta-value">{% if positions is defined %}{{ positions|length }} emparejamientos{% else %}0{% endif %}</div>
+            </div>
+        </div>
+    </div>
+
+    <h2>1. Configuración Inicial del Problema</h2>
+    <p>A continuación se presenta la matriz original con los costos/tiempos asociados a la asignación de cada unidad de origen hacia su correspondiente destino:</p>
+    
+    <div class="matrix-container">
+        <h3>Matriz de Costos Originales</h3>
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th style="text-transform: capitalize;">Origen \ Destino</th>
+                    {% for j in range(matrix[0]|length) %}
+                        <th>Destino {{ j + 1 }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(matrix|length) %}
+                <tr>
+                    <td style="font-weight: bold; background-color: #edf2f7; text-transform: capitalize;">{{ "Origen " ~ (i + 1) }}</td>
+                    {% for j in range(matrix[i]|length) %}
+                        <td>{{ matrix[i][j] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>2. Desarrollo Paso a Paso del Algoritmo</h2>
+    <p>Detalle de las operaciones de sustracción por renglones y columnas, seguidas por el trazado de líneas de cobertura indispensables para verificar la condición de optimalidad:</p>
+
+    {% if log %}
+        {% for step_key, step_data in log.items() %}
+            {% if step_key != 'final' %}
+            <div class="step-block">
+                <div class="step-header">
+                    {% if step_key == 'step1' %} Paso 1: Reducción por Filas (Restar Mínimos)
+                    {% elif step_key == 'step2' %} Paso 2: Reducción por Columnas (Restar Mínimos)
+                    {% else %} Iteración / Prueba de Cobertura ({{ step_key }})
+                    {% endif %}
+                </div>
+
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th style="text-transform: capitalize;">Origen / Destino </th>
+                            {% for j in range(step_data.matrix[0]|length) %}
+                                <th>D_{{ j + 1 }}</th>
+                            {% endfor %}
+                            {% if step_data.minorsRows is defined %}
+                                <th style="background-color: #cbd5e0; color: #2d3748;">Mínimo Fila</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(step_data.matrix|length) %}
+                        <tr class="{% if step_data.rowsCovers is defined and step_data.rowsCovers[i] %}row-covered{% endif %}">
+                            <td style="font-weight: bold; background-color: #edf2f7; text-decoration: none !important; color: #2d3748; text-transform: capitalize;">O_{{ i + 1 }}</td>
+                            {% for j in range(step_data.matrix[i]|length) %}
+                                <td class="{% if step_data.colsCovers is defined and step_data.colsCovers[j] %}col-covered{% endif %}">
+                                    {{ step_data.matrix[i][j] }}
+                                </td>
+                            {% endfor %}
+                            
+                            {% if step_data.minorsRows is defined %}
+                                <td class="side-val">{{ step_data.minorsRows[i] }}</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+
+                        {% if step_data.minorsCols is defined %}
+                        <tr>
+                            <td style="font-weight: bold; background-color: #cbd5e0;">Mínimo Columna</td>
+                            {% for col_val in step_data.minorsCols %}
+                                <td class="side-val">{{ col_val }}</td>
+                            {% endfor %}
+                            <td style="background-color: #cbd5e0;">-</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <h2>3. Asignaciones Óptimas Encontradas</h2>
+    <p>Resultado final del emparejamiento óptimo. Las celdas destacadas en verde representan los acoplamientos ideales seleccionados con un costo de oportunidad de cero, indicando adicionalmente su valor original:</p>
+
+    <div class="matrix-container">
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th style="text-transform: capitalize;"> Origen / Destino</th>
+                    {% for j in range(log.final.matrix[0]|length) %}
+                        <th>D_{{ j + 1 }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(log.final.matrix|length) %}
+                {% set row_idx = loop.index0 %}
+                <tr>
+                    <td style="font-weight: bold; background-color: #edf2f7; text-transform: capitalize;">O_{{ row_idx + 1 }}</td>
+                    {% for j in range(log.final.matrix[i]|length) %}
+                        {% set col_idx = loop.index0 %}
+                        
+                        {# Inicialización de estados para la celda actual (row_idx, col_idx) #}
+                        {% set ns = namespace(is_assigned=false, assigned_value="") %}
+                        
+                        {# Bucle de emparejamiento con el arreglo de posiciones #}
+                        {% if positions is defined and values is defined %}
+                            {% for pos in positions %}
+                                {% if pos[0] == row_idx and pos[1] == col_idx %}
+                                    {% set ns.is_assigned = true %}
+                                    {% set ns.assigned_value = values[loop.index0] %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <td class="{% if ns.is_assigned %}assigned-cell{% endif %}">
+                            {{ log.final.matrix[i][j] }}
+                            {% if ns.is_assigned %}
+                                <div style="font-size: 8pt; color: #234e52; font-weight: bold; margin-top: 4px;">
+                                    Asignado (Valor: {{ ns.assigned_value }})
+                                </div>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>4. Conclusión de la Asignación</h2>
+    <div class="conclusion-box">
+        <div style="font-weight: bold; font-size: 12pt; color: #22543d; margin-bottom: 8px;">Resumen Ejecutivo</div>
+        
+        {% if conclusion %}
+            <p style="margin: 0; color: #2d3748; white-space: pre-line;">{{ conclusion }}</p>
+        {% endif %}
+        
+        <div class="result-highlight">
+            (Resultado Óptimo Global): {{ result }}
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,14 +1,14 @@
 from pydantic import BaseModel, model_validator
-from enum import Enum
 from ..utils.errors import check_dimensions, check_matrix_management, check_orgDes
+from enum import Enum
 
-class groqValidMethods(str, Enum):
+class ValidMethods(str, Enum):
     minimum_cost = "costo_minimo"
     nortwest_corner = "esquina_noroeste"
     vogel = "vogel"
 
-class groqMessage(BaseModel):
-    method: groqValidMethods
+class dataMessage(BaseModel):
+    method: ValidMethods
     origins: str | list[str]
     destinations: str | list[str]
     extraContext: str | None = None
@@ -27,9 +27,11 @@ class groqMessage(BaseModel):
     def balance(self):
         self.balanced = sum(self.offers) == sum(self.demands)
         return self
-    
 
-class groqHungarian(BaseModel):
+class dataPDF(dataMessage):
+    conclusion: str
+
+class dataHungarian(BaseModel):
     origins: str | list[str]
     destinations: str | list[str]
     extraContext: str | None = None
@@ -42,7 +44,9 @@ class groqHungarian(BaseModel):
     _check = model_validator(mode="after")(check_matrix_management)
     _check_orgDes = model_validator(mode="after")(check_orgDes)
 
+class dataHungarianPDF(dataHungarian):
+    conclusion: str
 
-class groqAnswer(BaseModel):
+class dataAnswer(BaseModel):
     message: str
     conclusionGroq: str | None = None

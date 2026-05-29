@@ -1,12 +1,6 @@
-import os
-from groq import Groq
-
 class transport:
 
     def __init__(self, matrix, offers, demands):
-        groqKey = os.getenv("GROQ_API_KEY", "")
-        self.client = Groq(api_key=groqKey)
-
         self.matrix = matrix
         self.offers = offers
         self.demands = demands

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Optimización de Transporte</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+            @bottom-right {
+                content: "Página " counter(page) " de " counter(pages);
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #718096;
+            }
+            @bottom-left {
+                content: "Reporte de Optimización — FastAPI & WeasyPrint";
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #718096;
+            }
+        }
+        
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #2d3748;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            font-size: 10pt;
+        }
+
+        /* Banner de Encabezado */
+        .header-banner {
+            margin: -20mm -15mm 25px -15mm;
+            padding: 25px 15px;
+            background: linear-gradient(135deg, #1a365d 0%, #2a4365 100%);
+            color: #ffffff;
+        }
+        
+        .header-banner h1 {
+            margin: 0 0 8px 0;
+            font-size: 20pt;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        
+        .header-banner p {
+            margin: 0;
+            font-size: 10pt;
+            color: #ebf8ff;
+            opacity: 0.9;
+        }
+
+        /* Bloque de Metadatos */
+        .meta-grid {
+            display: table;
+            width: 100%;
+            margin-bottom: 25px;
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            border-collapse: separate;
+        }
+        
+        .meta-row {
+            display: table-row;
+        }
+        
+        .meta-cell {
+            display: table-cell;
+            padding: 12px 15px;
+            vertical-align: top;
+            width: 50%;
+        }
+        
+        .meta-cell:first-child {
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .meta-label {
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #718096;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .meta-value {
+            font-size: 11pt;
+            color: #1a202c;
+            font-weight: 600;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 9pt;
+            font-weight: bold;
+        }
+        
+        .badge-success {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-warning {
+            background-color: #feebc8;
+            color: #744210;
+        }
+
+        h2 {
+            font-size: 14pt;
+            color: #2b6cb0;
+            margin-top: 30px;
+            margin-bottom: 12px;
+            padding-left: 8px;
+            border-left: 4px solid #3182ce;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 11pt;
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            page-break-after: avoid;
+        }
+
+        /* Tablas Matriciales */
+        .matrix-container {
+            margin: 15px 0 25px 0;
+            page-break-inside: avoid;
+        }
+
+        table.matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            font-size: 9.5pt;
+        }
+
+        table.matrix-table th {
+            background-color: #2d3748;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 8px 10px;
+            border: 1px solid #4a5568;
+            text-align: center;
+        }
+
+        table.matrix-table td {
+            padding: 8px 10px;
+            border: 1px solid #cbd5e0;
+            text-align: center;
+        }
+
+        table.matrix-table tr:nth-child(even) td {
+            background-color: #f7fafc;
+        }
+
+        .cost-sub {
+            font-size: 10pt;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        table.matrix-table .total-cell {
+            background-color: #edf2f7 !important;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        /* Bloques de Pasos de Algoritmo */
+        .step-block {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        .step-header {
+            font-weight: bold;
+            color: #2c5282;
+            font-size: 11pt;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 6px;
+            text-transform: capitalize;
+        }
+
+        .step-meta {
+            margin-bottom: 12px;
+            font-size: 9.5pt;
+            background-color: #f7fafc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Bloque de Conclusión */
+        .conclusion-box {
+            background-color: #ebf8ff;
+            border-left: 5px solid #3182ce;
+            padding: 18px;
+            border-radius: 0 6px 6px 0;
+            margin-top: 30px;
+            page-break-inside: avoid;
+        }
+
+        .result-highlight {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2b6cb0;
+            background-color: #ffffff;
+            padding: 8px 15px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 15px;
+            border: 1px solid #bfdbfe;
+        }
+        
+        .context-box {
+            background-color: #f7fafc;
+            border-left: 3px solid #718096;
+            padding: 10px 15px;
+            font-size: 9.5pt;
+            margin-bottom: 20px;
+        }
+
+        /* Ajuste para saltos de línea en strings con markdown nativo (\n) */
+        .preserve-lines {
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-banner">
+        <h1>Reporte de Optimización de Transporte</h1>
+        <p>Resolución Automática de Modelos de Distribución de Operaciones</p>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-row">
+            <div class="meta-cell">
+                <div class="meta-label">Método Utilizado</div>
+                <div class="meta-value">
+                    {% if method == 'costo_minimo' %} Costo Mínimo 
+                    {% elif method == 'esquina_noroeste' %} Esquina Noroeste
+                    {% elif method == 'vogel' %} Aproximación de Vogel
+                    {% else %} {{ method }} {% endif %}
+                </div>
+            </div>
+            <div class="meta-cell">
+                <div class="meta-label">Estado de Balanceo Original</div>
+                <div class="meta-value">
+                    {% if balanced %}
+                        <span class="badge badge-success">Balanceado</span>
+                    {% else %}
+                        <span class="badge badge-warning">No Balanceado (Se aplicó ajuste artificial)</span> 
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if extraContext %}
+    <div class="context-box">
+        <strong>Contexto del Problema:</strong> {{ extraContext }}
+    </div>
+    {% endif %}
+
+    <h2>1. Parámetros e Inicialización</h2>
+    <div class="matrix-container">
+        <h3>Matriz Base de Costos Recibida</h3>
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th>{{ origins | capitalize }} \ {{ destinations | capitalize }}</th> 
+                    {% for j in range(matrix[0]|length) %}
+                        <th>Destino {{ j + 1 }}</th>
+                    {% endfor %}
+                    <th>Oferta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(matrix|length) %} 
+                <tr>
+                    <td style="font-weight: bold; background-color: #edf2f7;">Origen {{ i + 1 }}</td>
+                    {% for j in range(matrix[i]|length) %}
+                        <td><div class="cost-sub">${{ matrix[i][j] }}</div></td> 
+                    {% endfor %}
+                    <td class="total-cell">{{ offers[i] }}</td> 
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td style="font-weight: bold; background-color: #edf2f7;">Demanda</td>
+                    {% for j in range(demands|length) %} <td class="total-cell">{{ demands[j] }}</td> {% endfor %} 
+                    <td style="background-color: #cbd5e0; font-weight: bold;">{{ offers|sum }}</td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>2. Resolución Iterativa del Algoritmo</h2>
+    <p>A continuación se evalúan de forma secuencial las reducciones matriciales basadas en las penalizaciones de costo y celdas de valor mínimo de la cadena:</p>
+
+    {% if log %} 
+        {% for iter_name, iter_data in log.items() %} 
+        <div class="step-block">
+            <div class="step-header">{{ iter_name }}</div> 
+            
+            <div class="step-meta">
+                <strong>Costo Mínimo Identificado:</strong> ${{ iter_data.minimun }} | 
+                <strong>Cantidad Asignada:</strong> {{ iter_data.assign }} unidades |
+                <strong>Coordenada Celda (X, Y):</strong> ({{ iter_data.x }}, {{ iter_data.y }}) 
+            </div>
+
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Origen \ Destino</th>
+                        {% for j in range(iter_data.matrix[0]|length) %}
+                            <th>Destino Remanente</th>
+                        {% endfor %}
+                        <th>Oferta Restante</th>
+                        {% if iter_data.penaltiesRows %}
+                            <th>Penalidades</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(iter_data.matrix|length) %} 
+                    <tr>
+                        <td style="font-weight: bold; background-color: #edf2f7;">Fila {{ i + 1 }}</td>
+                        {% for j in range(iter_data.matrix[i]|length) %} 
+                            <td>
+                                <div class="cost-sub">${{ iter_data.matrix[i][j] }}</div> 
+                            </td>
+                        {% endfor %}
+                        <td class="total-cell">{{ iter_data.offers[i] }}</td> 
+                        {% if iter_data.penaltiesRows %}
+                            <td class="total-cell">{{ iter_data.penaltiesRows[i] }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td style="font-weight: bold; background-color: #edf2f7;">Demanda Restante</td>
+                        {% for j in range(iter_data.demands|length) %} 
+                            <td class="total-cell">{{ iter_data.demands[j] }}</td>
+                        {% endfor %}
+                        <td style="background-color: #cbd5e0;">-</td>
+                    </tr>
+                    {% if iter_data.penaltiesColt %}
+                    <tr>
+                        <td style="font-weight: bold; background-color: #edf2f7;">Penalidades</td>
+                        {% for j in range(iter_data.penaltiesColt|length) %} 
+                            <td class="total-cell">{{ iter_data.penaltiesColt[j] }}</td>
+                        {% endfor %}
+                        <td style="background-color: #cbd5e0;">-</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No se encontraron registros de iteraciones analíticas.</p>
+    {% endif %}
+
+    <h2>3. Conclusión Financiera y Operativa</h2>
+    <div class="conclusion-box">
+        <div style="font-weight: bold; font-size: 12pt; color: #2b6cb0; margin-bottom: 10px;">Análisis de Resultados</div>
+        <div class="preserve-lines" style="color: #2d3748;">
+            {{ conclusion }}
+        </div>
+        
+        <div class="result-highlight">
+            Costo Mínimo Total Evaluado: ${{ "{:,.2f}".format(result) }}
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,11 +1,11 @@
 from fastapi import APIRouter, status, HTTPException
-from ..schemas.groqData import groqAnswer, groqMessage, groqHungarian
+from ..schemas.data import dataAnswer, dataHungarian, dataMessage
 from ..commands.request_groq import request_groq
 
 router_groq = APIRouter(prefix="/groq")
     
 @router_groq.post("/")
-async def methods_operations(groq_message: groqMessage):
+async def methods_operations(groq_message: dataMessage):
     rg = request_groq()
     rpt = rg.groq_promt_method(
         balanced=groq_message.balanced,
@@ -23,7 +23,7 @@ async def methods_operations(groq_message: groqMessage):
     if rpt is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Ha habido un error al crear la conclusión con groq")
 
-    response = groqAnswer(
+    response = dataAnswer(
         message="Conclusion terminada",
         conclusionGroq=rpt
     ).model_dump()
@@ -31,7 +31,7 @@ async def methods_operations(groq_message: groqMessage):
     return response
 
 @router_groq.post("/hungarian")
-async def methods_hungarian(groq_message: groqHungarian):
+async def methods_hungarian(groq_message: dataHungarian):
     rg = request_groq()
     rpt = rg.groq_promt_hungarian(
         destinations=groq_message.destinations,
@@ -46,7 +46,7 @@ async def methods_hungarian(groq_message: groqHungarian):
     if rpt is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Ha habido un error al crear la conclusión con groq")
 
-    response = groqAnswer(
+    response = dataAnswer(
         message="Conclusion terminada",
         conclusionGroq=rpt
     ).model_dump()

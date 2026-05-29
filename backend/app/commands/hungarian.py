@@ -19,7 +19,7 @@ class hungarian_method:
                 self.matrix[i][j] -=  minor
             minorsRows.append(minor)
         
-        self.log["step1"] = {"matrix": self.matrix, "minorsRows": minorsRows}
+        self.log["step1"] = {"matrix": [fila[:] for fila in self.matrix], "minorsRows": minorsRows}
 
         for i in range(m):
             minor = self.matrix[0][i]
@@ -31,7 +31,7 @@ class hungarian_method:
                 self.matrix[j][i] -=  minor
             minorsCols.append(minor)
         
-        self.log["step2"] = {"matrix": self.matrix, "minorsCols": minorsCols}
+        self.log["step2"] = {"matrix": [fila[:] for fila in self.matrix], "minorsCols": minorsCols}
         
         rows_covers = [False for i in range(m)]
         cols_covers = [False for i in range(m)]
