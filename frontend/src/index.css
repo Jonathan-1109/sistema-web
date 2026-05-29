@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    --paper: 245 241 234;
+    --paper-deep: 255 255 255;
+    --paper-elevated: 251 249 245;
+    --paper-muted: 225 218 207;
+
+    --ink: 28 25 23;
+    --ink-soft: 87 83 78;
+    --ink-faint: 168 162 158;
+
+    --coral: 196 75 50;
+    --coral-glow: 214 95 68;
+    --coral-dim: 168 58 38;
+
+    --rose: 190 62 72;
+    --rose-glow: 210 82 92;
+    --rose-dim: 160 48 58;
+
+    --sage: 22 128 98;
+    --sage-glow: 34 150 118;
+    --sage-dim: 16 100 78;
+
+    --violet: 91 79 207;
+    --violet-soft: 115 103 224;
+
+    --shadow-lift: 0 20px 40px -10px rgba(28, 25, 23, 0.12);
+    --shadow-panel: 0 8px 32px -8px rgba(28, 25, 23, 0.08), 0 0 0 1px rgba(28, 25, 23, 0.06);
+    --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    --paper: 30 40 64;
+    --paper-deep: 40 53 80;
+    --paper-elevated: 49 66 98;
+    --paper-muted: 74 95 130;
+
+    --ink: 238 242 247;
+    --ink-soft: 168 184 208;
+    --ink-faint: 107 125 154;
+
+    --coral: 77 142 255;
+    --coral-glow: 116 168 255;
+    --coral-dim: 47 111 219;
+
+    --rose: 232 93 106;
+    --rose-glow: 240 120 133;
+    --rose-dim: 201 74 86;
+
+    --sage: 61 214 181;
+    --sage-glow: 92 230 200;
+    --sage-dim: 43 184 150;
+
+    --violet: 124 127 245;
+    --violet-soft: 158 161 255;
+
+    --shadow-lift: 0 20px 40px -10px rgba(15, 23, 42, 0.55);
+    --shadow-panel: 0 8px 32px -8px rgba(15, 23, 42, 0.45), 0 0 0 1px rgba(148, 163, 184, 0.12);
+    --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 17px;
+    overflow-x: hidden;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans text-ui-base m-0 overflow-x-hidden;
+    background-image:
+      radial-gradient(ellipse 90% 55% at 10% -15%, rgba(var(--coral) / 0.1), transparent),
+      radial-gradient(ellipse 70% 45% at 95% 110%, rgba(var(--violet) / 0.08), transparent);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 90% 55% at 10% -15%, rgba(77, 142, 255, 0.18), transparent),
+      radial-gradient(ellipse 70% 45% at 95% 110%, rgba(124, 127, 245, 0.12), transparent),
+      radial-gradient(ellipse 50% 30% at 50% 50%, rgba(232, 93, 106, 0.04), transparent);
+  }
+
+  ::selection {
+    @apply bg-coral/40 text-ink;
+  }
+
+  select option {
+    @apply bg-paper-deep text-ink;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer components {
+  .grain {
+    position: relative;
+  }
+
+  .grain::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+  }
+
+  .cell-input {
+    @apply w-full h-full bg-transparent text-center font-mono text-ui-lg text-ink outline-none
+      border-none transition-colors duration-150;
+  }
+
+  .cell-input:focus {
+    @apply text-coral-glow;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl
+      bg-coral text-white font-semibold text-ui-base tracking-wide
+      transition-all duration-200 hover:bg-coral-glow hover:shadow-lift
+      disabled:opacity-40 disabled:pointer-events-none disabled:shadow-none;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
+      text-ink-soft font-medium text-ui-base
+      transition-colors duration-150 hover:text-ink hover:bg-paper-elevated;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+      border border-paper-muted/80 bg-paper-elevated text-ink-soft font-medium text-ui-base
+      transition-colors duration-150 hover:text-ink hover:border-coral/40;
+  }
+
+  .panel {
+    @apply bg-paper-deep backdrop-blur-md border border-paper-muted/80 rounded-2xl shadow-panel;
+  }
+
+  .panel-inset {
+    @apply bg-paper-elevated/80 border border-paper-muted/60 rounded-xl;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-paper-muted rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-ink-faint;
+}
