@@ -41,7 +41,7 @@ export function FlowShell({
               <button
                 type="button"
                 onClick={onBack}
-                className="btn-ghost -ml-2 mb-2 text-ink-faint hover:text-ink text-ui-sm py-1"
+                className="btn-ghost -ml-2 mb-2 text-ink hover:text-ink text-ui-sm py-1"
               >
                 ← Inicio
               </button>

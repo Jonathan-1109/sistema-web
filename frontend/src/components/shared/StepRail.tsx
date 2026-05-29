@@ -36,7 +36,7 @@ export function StepRail({ current, onNavigate, access }: StepRailProps) {
           >
             <span
               className={`font-mono text-ui-sm tracking-widest uppercase mb-1
-                ${isActive ? 'text-coral' : isPast ? 'text-sage' : 'text-ink-faint'}`}
+                ${isActive ? 'text-coral' : isPast ? 'text-sage' : 'text-ink'}`}
             >
               {step.num}
             </span>

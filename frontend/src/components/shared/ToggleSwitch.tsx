@@ -10,7 +10,7 @@ export function ToggleSwitch({ checked, onChange, label, hint }: ToggleSwitchPro
     <label className="flex items-center justify-between gap-2 cursor-pointer min-w-0">
       <div className="min-w-0">
         <p className="text-ui-base font-medium text-ink truncate">{label}</p>
-        {hint && <p className="text-ui-sm text-ink-faint truncate">{hint}</p>}
+        {hint && <p className="text-ui-sm text-ink truncate">{hint}</p>}
       </div>
       <button
         type="button"

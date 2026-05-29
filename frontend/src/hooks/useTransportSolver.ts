@@ -10,6 +10,13 @@ import {
   defaultDestinationLabels,
   defaultOriginLabels,
 } from '@/lib/matrix';
+import {
+  DEFAULT_COST_MATRIX,
+  DEFAULT_DEMANDS,
+  DEFAULT_DESTINATION_LABELS,
+  DEFAULT_OFFERS,
+  DEFAULT_ORIGIN_LABELS,
+} from '@/components/transport/default';
 import type { ChainResponse, TransportLog } from '@/types/api';
 import type { FlowStep, LogEntry, TransportMethod } from '@/types/domain';
 
@@ -61,20 +68,18 @@ export interface TransportSolverState {
 }
 
 const INITIAL_ROWS = 3;
-const INITIAL_COLS = 3;
+const INITIAL_COLS = 4;
 
 export function useTransportSolver(): TransportSolverState {
   const [step, setStep] = useState<FlowStep>('datos');
   const [rows, setRows] = useState(INITIAL_ROWS);
   const [cols, setCols] = useState(INITIAL_COLS);
   const [method, setMethod] = useState<TransportMethod>('costo_minimo');
-  const [matrix, setMatrix] = useState(() => createMatrix(INITIAL_ROWS, INITIAL_COLS));
-  const [offers, setOffers] = useState(() => createVector(INITIAL_ROWS));
-  const [demands, setDemands] = useState(() => createVector(INITIAL_COLS));
-  const [originLabels, setOriginLabels] = useState(() => defaultOriginLabels(INITIAL_ROWS));
-  const [destinationLabels, setDestinationLabels] = useState(() =>
-    defaultDestinationLabels(INITIAL_COLS),
-  );
+  const [matrix, setMatrix] = useState(() => DEFAULT_COST_MATRIX);
+  const [offers, setOffers] = useState(() => DEFAULT_OFFERS);
+  const [demands, setDemands] = useState(() => DEFAULT_DEMANDS);
+  const [originLabels, setOriginLabels] = useState(() => DEFAULT_ORIGIN_LABELS);
+  const [destinationLabels, setDestinationLabels] = useState(() => DEFAULT_DESTINATION_LABELS);
   const [extraContext, setExtraContext] = useState('');
   const [useAi, setUseAi] = useState(false);
   const [logs, setLogs] = useState<LogEntry[]>([
@@ -260,6 +265,18 @@ export function useTransportSolver(): TransportSolverState {
     appendLog('Generando reporte PDF…', 'info');
 
     try {
+      console.log(method,
+        originLabels,
+        destinationLabels,
+        extraContext || undefined,
+        matrix,
+        offers,
+        demands,
+        balanced,
+        solutionLog,
+        result,
+        values,
+        conclusion ?? '',)
       await downloadTransportPdf({
         method,
         origins: originLabels,
@@ -299,13 +316,24 @@ export function useTransportSolver(): TransportSolverState {
   ]);
 
   const reset = useCallback(() => {
-    resize(INITIAL_ROWS, INITIAL_COLS);
+    setMatrix(DEFAULT_COST_MATRIX);
+    setOffers(DEFAULT_OFFERS);
+    setDemands(DEFAULT_DEMANDS);
+    setOriginLabels(DEFAULT_ORIGIN_LABELS);
+    setDestinationLabels(DEFAULT_DESTINATION_LABELS);
+    setRows(INITIAL_ROWS);
+    setCols(INITIAL_COLS);
+    setResult(null);
+    setValues(null);
+    setSolutionLog(null);
+    setConclusion(null);
+    setBalanced(null);
     setStep('datos');
     setMethod('costo_minimo');
     setUseAi(false);
     setExtraContext('');
-    setLogs([createLog('Espacio reiniciado.', 'info')]);
-  }, [resize]);
+    setLogs([createLog('Valores por defecto restaurados.', 'info')]);
+  }, []);
 
   return {
     step,

@@ -29,13 +29,13 @@ export function BalanceIndicator({ balance, serverBalanced }: BalanceIndicatorPr
           <p className="font-mono text-2xl font-bold text-ink tabular-nums leading-none">
             {totalOffers}
           </p>
-          <p className="text-ui-sm text-ink-faint mt-1.5">Oferta total</p>
+          <p className="text-ui-sm text-ink mt-1.5">Oferta total</p>
         </div>
         <div className="min-w-0">
           <p className="font-mono text-2xl font-bold text-ink tabular-nums leading-none">
             {totalDemands}
           </p>
-          <p className="text-ui-sm text-ink-faint mt-1.5">Demanda total</p>
+          <p className="text-ui-sm text-ink mt-1.5">Demanda total</p>
         </div>
       </div>
       {!isBalanced && (

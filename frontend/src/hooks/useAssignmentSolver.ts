@@ -8,6 +8,11 @@ import {
   defaultTaskLabels,
   defaultWorkerLabels,
 } from '@/lib/matrix';
+import {
+  DEFAULT_MATRIX,
+  DEFAULT_WORKER_LABELS,
+  DEFAULT_TASK_LABELS,
+} from '@/components/assignment/default';
 import type { AssignmentLog, ManagementResponse } from '@/types/api';
 import type { FlowStep, LogEntry } from '@/types/domain';
 
@@ -55,9 +60,9 @@ const INITIAL_SIZE = 4;
 export function useAssignmentSolver(): AssignmentSolverState {
   const [step, setStep] = useState<FlowStep>('datos');
   const [size, setSize] = useState(INITIAL_SIZE);
-  const [matrix, setMatrix] = useState(() => createSquareMatrix(INITIAL_SIZE));
-  const [workerLabels, setWorkerLabels] = useState(() => defaultWorkerLabels(INITIAL_SIZE));
-  const [taskLabels, setTaskLabels] = useState(() => defaultTaskLabels(INITIAL_SIZE));
+  const [matrix, setMatrix] = useState(() => DEFAULT_MATRIX);
+  const [workerLabels, setWorkerLabels] = useState(() => DEFAULT_WORKER_LABELS);
+  const [taskLabels, setTaskLabels] = useState(() => DEFAULT_TASK_LABELS);
   const [extraContext, setExtraContext] = useState('');
   const [useAi, setUseAi] = useState(false);
   const [logs, setLogs] = useState<LogEntry[]>([
@@ -233,12 +238,20 @@ export function useAssignmentSolver(): AssignmentSolverState {
   ]);
 
   const reset = useCallback(() => {
-    resize(INITIAL_SIZE);
+    setMatrix(DEFAULT_MATRIX);
+    setWorkerLabels(DEFAULT_WORKER_LABELS);
+    setTaskLabels(DEFAULT_TASK_LABELS);
+    setSize(INITIAL_SIZE);
+    setResult(null);
+    setValues(null);
+    setPositions(null);
+    setSolutionLog(null);
+    setConclusion(null);
     setStep('datos');
     setUseAi(false);
     setExtraContext('');
-    setLogs([createLog('Espacio reiniciado.', 'info')]);
-  }, [resize]);
+    setLogs([createLog('Valores por defecto restaurados.', 'info')]);
+  }, []);
 
   return {
     step,

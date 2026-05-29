@@ -43,7 +43,7 @@ export function SquareMatrixEditor({
                   value={label}
                   onChange={(e) => onTaskLabelChange(j, e.target.value)}
                   className="w-full text-center font-mono text-ui-sm uppercase tracking-wide
-                    text-ink-faint bg-transparent border-none outline-none focus:text-violet-soft"
+                    text-ink bg-transparent border-none outline-none focus:text-violet"
                 />
               </th>
             ))}
@@ -57,8 +57,8 @@ export function SquareMatrixEditor({
                   type="text"
                   value={workerLabels[i] ?? ''}
                   onChange={(e) => onWorkerLabelChange(i, e.target.value)}
-                  className="w-full font-mono text-ui-sm uppercase tracking-wide text-ink-faint
-                    bg-transparent border-none outline-none focus:text-violet-soft text-right"
+                  className="w-full font-semibold text-ui-sm uppercase tracking-wide text-ink
+                    bg-transparent border-none outline-none focus:text-violet text-right"
                 />
               </td>
               {Array.from({ length: size }).map((_, j) => {

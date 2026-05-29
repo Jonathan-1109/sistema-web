@@ -47,7 +47,7 @@ export function AssignmentWorkspace({ solver, onBack }: AssignmentWorkspaceProps
           placeholder="Contexto (opcional)…"
           rows={2}
           className="w-full max-w-full text-ui-base bg-paper-elevated border border-paper-muted/70 rounded-xl
-            p-3 resize-none outline-none focus:border-violet/50 placeholder:text-ink-faint box-border"
+            p-3 resize-none outline-none focus:border-violet/50 placeholder:text-ink box-border"
         />
       )}
 
@@ -63,7 +63,7 @@ export function AssignmentWorkspace({ solver, onBack }: AssignmentWorkspaceProps
       )}
 
       <div className="panel-inset p-4">
-        <p className="font-mono text-ui-sm uppercase tracking-widest text-ink-faint mb-2">
+        <p className="font-mono text-ui-sm uppercase tracking-widest text-ink mb-2">
           Actividad
         </p>
         <ActivityFeed entries={solver.logs} maxHeight="max-h-24" />
@@ -121,7 +121,7 @@ export function AssignmentWorkspace({ solver, onBack }: AssignmentWorkspaceProps
       {solver.step === 'resultado' && hasResult && solver.result != null && (
         <>
           <div className="shrink-0 panel p-5 flex flex-wrap items-center gap-6">
-            <p className="font-mono text-ui-sm uppercase tracking-widest text-ink-faint">
+            <p className="font-mono text-ui-sm uppercase tracking-widest text-ink">
               Costo mínimo
             </p>
             <p className="font-display text-5xl font-semibold text-violet-soft tabular-nums">

@@ -27,7 +27,7 @@ export function LandingView({ onSelect }: LandingViewProps) {
               Sin plantillas: cada módulo es un espacio de trabajo dedicado con
               visualización paso a paso.
             </p>
-            <div className="mt-12 flex flex-wrap items-center gap-8 text-ui-base text-ink-faint">
+            <div className="mt-12 flex flex-wrap items-center gap-8 text-ui-base text-ink">
               <span className="flex items-center gap-2.5">
                 <span className="w-2 h-2 rounded-full bg-coral" />
                 3 heurísticas de transporte
@@ -88,7 +88,7 @@ export function LandingView({ onSelect }: LandingViewProps) {
       </div>
 
       <footer className="border-t border-paper-muted/50 py-5 px-8 lg:px-16">
-        <p className="font-mono text-ui-sm text-ink-faint uppercase tracking-widest text-center">
+        <p className="font-mono text-ui-sm text-ink uppercase tracking-widest text-center">
           Fluxo — Optimización lineal interactiva
         </p>
       </footer>

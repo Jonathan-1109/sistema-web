@@ -30,7 +30,7 @@ export function MethodSelector({ selected, onSelect, compact = true }: MethodSel
             </option>
           ))}
         </select>
-        <p className="text-ui-sm text-ink-faint leading-relaxed">
+        <p className="text-ui-sm text-ink leading-relaxed">
           {TRANSPORT_METHODS.find((m) => m.id === selected)?.description}
         </p>
       </div>

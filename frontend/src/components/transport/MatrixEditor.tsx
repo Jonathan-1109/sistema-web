@@ -56,7 +56,7 @@ export function MatrixEditor({
                   value={label}
                   onChange={(e) => onDestinationLabelChange(j, e.target.value)}
                   className="w-full text-center font-mono text-ui-sm uppercase tracking-wide
-                    text-ink-faint bg-transparent border-none outline-none focus:text-coral"
+                    text-ink bg-transparent border-none outline-none focus:text-coral"
                   aria-label={`Nombre destino ${j + 1}`}
                 />
               </th>
@@ -74,7 +74,7 @@ export function MatrixEditor({
                   type="text"
                   value={originLabels[i] ?? ''}
                   onChange={(e) => onOriginLabelChange(i, e.target.value)}
-                  className="w-full font-mono text-ui-sm uppercase tracking-wide text-ink-faint
+                  className="w-full font-semibold text-ui-sm uppercase tracking-wide text-ink
                     bg-transparent border-none outline-none focus:text-coral text-right"
                   aria-label={`Nombre origen ${i + 1}`}
                 />
@@ -115,7 +115,7 @@ export function MatrixEditor({
             </tr>
           ))}
           <tr>
-            <td className="font-mono text-ui-sm uppercase tracking-widest text-rose text-right pr-1 align-middle py-2">
+            <td className="font-semibold text-ui-sm uppercase tracking-widest text-rose text-right pr-1 align-middle py-2">
               Demanda
             </td>
             {Array.from({ length: cols }).map((_, j) => (

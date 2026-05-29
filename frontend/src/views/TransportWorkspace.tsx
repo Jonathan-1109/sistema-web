@@ -32,12 +32,12 @@ function ResultSummary({
   return (
     <div className="shrink-0 flex flex-wrap items-center gap-x-8 gap-y-3 panel p-5">
       <div>
-        <p className="font-mono text-ui-sm uppercase tracking-widest text-ink-faint">Costo total</p>
+        <p className="font-mono text-ui-sm uppercase tracking-widest text-ink">Costo total</p>
         <p className="font-display text-5xl font-semibold text-coral tabular-nums mt-1">{result}</p>
       </div>
       {values && (
         <div className="min-w-0 flex-1">
-          <p className="font-mono text-ui-sm text-ink-faint mb-1.5">Asignaciones</p>
+          <p className="font-mono text-ui-sm text-ink mb-1.5">Asignaciones</p>
           <p className="font-mono text-ui-base text-ink-soft truncate">[{values.join(', ')}]</p>
         </div>
       )}
@@ -88,7 +88,7 @@ export function TransportWorkspace({ solver, onBack }: TransportWorkspaceProps) 
           placeholder="Contexto (opcional)…"
           rows={2}
           className="w-full max-w-full text-ui-base bg-paper-elevated border border-paper-muted/70 rounded-xl
-            p-3 resize-none outline-none focus:border-violet/50 placeholder:text-ink-faint box-border"
+            p-3 resize-none outline-none focus:border-violet/50 placeholder:text-ink box-border"
         />
       )}
 
@@ -104,7 +104,7 @@ export function TransportWorkspace({ solver, onBack }: TransportWorkspaceProps) 
       )}
 
       <div className="panel-inset p-4">
-        <p className="font-mono text-ui-sm uppercase tracking-widest text-ink-faint mb-2">
+        <p className="font-mono text-ui-sm uppercase tracking-widest text-ink mb-2">
           Actividad
         </p>
         <ActivityFeed entries={solver.logs} maxHeight="max-h-24" />
@@ -180,7 +180,7 @@ export function TransportWorkspace({ solver, onBack }: TransportWorkspaceProps) 
             <h2 className="font-display text-xl font-semibold text-ink mb-1.5">
               Línea de tiempo
             </h2>
-            <p className="text-ui-sm text-ink-faint mb-5">
+            <p className="text-ui-sm text-ink mb-5">
               Recorre cada iteración del método seleccionado.
             </p>
             <SolutionTimeline

@@ -43,7 +43,7 @@ export function AssignmentTimeline({ log }: AssignmentTimelineProps) {
             className="panel group"
             open={index === keys.length - 1}
           >
-            <summary className="px-4 py-3 cursor-pointer font-medium text-ui-base text-ink-soft
+            <summary className="px-4 py-3 cursor-pointer font-medium text-ui-base text-ink
               hover:text-ink list-none flex items-center justify-between">
               <span>{labelForKey(key, index)}</span>
               <span className="font-mono text-ui-sm text-ink-faint uppercase">{key}</span>
@@ -65,7 +65,7 @@ export function AssignmentTimeline({ log }: AssignmentTimelineProps) {
                             className={`
                               px-3 py-1.5 rounded text-center
                               ${colCovered ? 'bg-paper-muted/40 text-ink-faint' : ''}
-                              ${isZero && !colCovered ? 'bg-sage/15 text-sage font-semibold' : 'text-ink-soft'}
+                              ${isZero && !colCovered ? 'bg-sage/15 text-sage font-semibold' : 'text-ink'}
                             `}
                           >
                             {Number.isInteger(cell) ? cell : cell.toFixed(1)}
