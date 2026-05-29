@@ -282,7 +282,7 @@
                         <tr>
                             <th style="text-transform: capitalize;">Origen / Destino </th>
                             {% for j in range(step_data.matrix[0]|length) %}
-                                <th>D_{{ j + 1 }}</th>
+                                <th>Destino {{ j + 1 }}</th>
                             {% endfor %}
                             {% if step_data.minorsRows is defined %}
                                 <th style="background-color: #cbd5e0; color: #2d3748;">Mínimo Fila</th>
@@ -292,7 +292,7 @@
                     <tbody>
                         {% for i in range(step_data.matrix|length) %}
                         <tr class="{% if step_data.rowsCovers is defined and step_data.rowsCovers[i] %}row-covered{% endif %}">
-                            <td style="font-weight: bold; background-color: #edf2f7; text-decoration: none !important; color: #2d3748; text-transform: capitalize;">O_{{ i + 1 }}</td>
+                            <td style="font-weight: bold; background-color: #edf2f7; text-decoration: none !important; color: #2d3748; text-transform: capitalize;">Origen {{ i + 1 }}</td>
                             {% for j in range(step_data.matrix[i]|length) %}
                                 <td class="{% if step_data.colsCovers is defined and step_data.colsCovers[j] %}col-covered{% endif %}">
                                     {{ step_data.matrix[i][j] }}
@@ -330,7 +330,7 @@
                 <tr>
                     <th style="text-transform: capitalize;"> Origen / Destino</th>
                     {% for j in range(log.final.matrix[0]|length) %}
-                        <th>D_{{ j + 1 }}</th>
+                        <th>Destino {{ j + 1 }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -338,7 +338,7 @@
                 {% for i in range(log.final.matrix|length) %}
                 {% set row_idx = loop.index0 %}
                 <tr>
-                    <td style="font-weight: bold; background-color: #edf2f7; text-transform: capitalize;">O_{{ row_idx + 1 }}</td>
+                    <td style="font-weight: bold; background-color: #edf2f7; text-transform: capitalize;">Origen {{ row_idx + 1 }}</td>
                     {% for j in range(log.final.matrix[i]|length) %}
                         {% set col_idx = loop.index0 %}
                         

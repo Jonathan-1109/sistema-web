@@ -20,10 +20,10 @@ def check_matrix_management(cls,self):
         return self
 
 def check_orgDes(cls, self):
-        if type(self.origins) == list and len(self.origins) < len(self.matrix[0]):
+        if type(self.origins) == list and len(self.origins) != len(self.matrix):
             raise HTTPException(status_code=422, detail="La cantidad de origenes no coindice con la matriz de datos")     
         
-        if type(self.destinations) == list and len(self.destinations) < len(self.matrix):
+        if type(self.destinations) == list and len(self.destinations) != len(self.matrix[0]):
             raise HTTPException(status_code=422, detail="La cantidad de destinos no coindice con la matriz de datos")     
         
         return self

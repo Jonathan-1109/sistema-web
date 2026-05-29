@@ -34,3 +34,17 @@ Crea y obten una apikey en [GroqCloud](https://console.groq.com/) y crea un arch
 ```bash
 fastapi dev app/main.py
 ```
+
+### Frontend
+
+#### 1. Instalar dependencias
+```bash
+cd frontend
+pnpm install #o npm install
+```
+
+#### 2. Iniciar frontend
+```bash
+pnpm run dev #o npm run dev
+```
+

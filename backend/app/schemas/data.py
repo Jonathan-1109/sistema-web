@@ -29,7 +29,7 @@ class dataMessage(BaseModel):
         return self
 
 class dataPDF(dataMessage):
-    conclusion: str
+    conclusion: str | None = None
 
 class dataHungarian(BaseModel):
     origins: str | list[str]
@@ -45,7 +45,7 @@ class dataHungarian(BaseModel):
     _check_orgDes = model_validator(mode="after")(check_orgDes)
 
 class dataHungarianPDF(dataHungarian):
-    conclusion: str
+    conclusion: str | None = None
 
 class dataAnswer(BaseModel):
     message: str
