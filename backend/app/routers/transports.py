@@ -1,8 +1,9 @@
 from fastapi import APIRouter, status, HTTPException
-from ..schemas.chain import Chain, ResponseChain, ValidMethods
-from ..commands.minimun_cost import minimun_cost_method
-from ..commands.nortwest_corner import nortwest_corner_method
-from ..commands.vogel import vogel_approximation_method
+from ..schemas.chain import Chain, ResponseChain
+from ..schemas.base import ValidMethods
+from ..commands.transport.minimun_cost import minimun_cost_method
+from ..commands.transport.nortwest_corner import nortwest_corner_method
+from ..commands.transport.vogel import vogel_approximation_method
 
 router = APIRouter(prefix="/transport")
     
@@ -10,6 +11,7 @@ router = APIRouter(prefix="/transport")
 async def methods_operations(method: ValidMethods, chain: Chain):
     matrix, demands, offers = chain.matrix, chain.demands, chain.offers
     mc = None
+
     try:   
         match method:
             case "costo_minimo":

@@ -9,7 +9,7 @@ router_pdf = APIRouter(prefix="/pdf")
 async def generate_pdf(request: dataPDF):
     try:
         request.conclusion = request.conclusion.replace("*","") 
-        pdf_bytes, name = create_pdf(request,"pdfTemplate.html","Reporte")
+        pdf_bytes, name = create_pdf(request,"transportTemplate.html","Reporte")
         return StreamingResponse(
                 pdf_bytes,
                 media_type="application/pdf",
@@ -18,14 +18,14 @@ async def generate_pdf(request: dataPDF):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error al generar el PDF: " +str(e),
+            detail="Error al generar el PDF",
         )
 
 @router_pdf.post("/hungarian")
 async def generate_pdf(request: dataHungarianPDF):
     try:
         request.conclusion = request.conclusion.replace("*","") 
-        pdf_bytes, name = create_pdf(request, "hungarian.html", "Asignación")
+        pdf_bytes, name = create_pdf(request, "hungarianTemplate.html", "Asignación")
         return StreamingResponse(
                 pdf_bytes,
                 media_type="application/pdf",
@@ -34,5 +34,5 @@ async def generate_pdf(request: dataHungarianPDF):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error al generar el PDF: " +str(e),
+            detail="Error al generar el PDF" ,
         )

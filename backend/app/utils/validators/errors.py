@@ -14,9 +14,6 @@ def check_matrix_management(cls,self):
         if not all(len(fila) == len(self.matrix[0]) for fila in self.matrix):
             raise HTTPException(status_code=422, detail="El tamaño de la matriz es irregular")
         
-        if len(self.matrix) != len(self.matrix[0]):
-            raise HTTPException(status_code=422, detail="La matriz no es cuadrada")
-                
         return self
 
 def check_orgDes(cls, self):

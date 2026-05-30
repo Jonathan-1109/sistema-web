@@ -1,10 +1,10 @@
 from fastapi import APIRouter, status, HTTPException
 from ..schemas.management import Management, ResponseManagement
-from ..commands.hungarian import hungarian_method
+from ..commands.hungarian.hungarian import hungarian_method
 
-router_ass = APIRouter(prefix="/assignment")
+router_agm = APIRouter(prefix="/assignment")
     
-@router_ass.post("/")
+@router_agm.post("/")
 async def hungarian(mng: Management):
     matrix = mng.matrix
     try:   
