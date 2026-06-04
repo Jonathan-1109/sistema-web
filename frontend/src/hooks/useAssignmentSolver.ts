@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { solveAssignment } from '@/api/assignment';
-import { requestHungarianConclusion } from '@/api/groq';
-import { downloadHungarianPdf } from '@/api/pdf';
+import { requestConclusion } from '@/api/groq';
+import { downloadPDF } from '@/api/pdf';
 import {
   clampDimension,
   createSquareMatrix,
@@ -76,6 +76,8 @@ export function useAssignmentSolver(): AssignmentSolverState {
   const [positions, setPositions] = useState<number[][] | null>(null);
   const [solutionLog, setSolutionLog] = useState<AssignmentLog | null>(null);
   const [conclusion, setConclusion] = useState<string | null>(null);
+  const [ID, setID] = useState<string>("");
+
 
   const appendLog = useCallback((message: string, tone: LogEntry['tone'] = 'neutral') => {
     setLogs((prev) => [...prev, createLog(message, tone)]);
@@ -127,22 +129,18 @@ export function useAssignmentSolver(): AssignmentSolverState {
       setPositions(response.positions);
       setSolutionLog(response.log);
       setStep('resultado');
+      setID(response.id)
       appendLog(`Costo mínimo de asignación: ${response.result ?? '—'}`, 'success');
 
       if (useAi && response.log && response.result != null && response.values && response.positions) {
         setAiLoading(true);
         appendLog('Generando conclusión con Groq…', 'ai');
         try {
-          const groq = await requestHungarianConclusion({
+          const groq = await requestConclusion({
             origins: workerLabels,
             destinations: taskLabels,
             extraContext: extraContext || undefined,
-            matrix,
-            log: response.log,
-            result: response.result,
-            values: response.values,
-            positions: response.positions,
-          });
+          }, ID);
           setConclusion(groq.conclusionGroq);
           setStep('resultado');
           appendLog('Conclusión generada.', 'ai');
@@ -168,16 +166,11 @@ export function useAssignmentSolver(): AssignmentSolverState {
     appendLog('Solicitando conclusión analítica…', 'ai');
 
     try {
-      const groq = await requestHungarianConclusion({
+      const groq = await requestConclusion({
         origins: workerLabels,
         destinations: taskLabels,
         extraContext: extraContext || undefined,
-        matrix,
-        log: solutionLog,
-        result,
-        values,
-        positions,
-      });
+      }, ID);
       setConclusion(groq.conclusionGroq);
       setStep('resultado');
       appendLog('Conclusión generada.', 'ai');
@@ -206,17 +199,7 @@ export function useAssignmentSolver(): AssignmentSolverState {
     appendLog('Generando reporte PDF…', 'info');
 
     try {
-      await downloadHungarianPdf({
-        origins: workerLabels,
-        destinations: taskLabels,
-        extraContext: extraContext || undefined,
-        matrix,
-        log: solutionLog,
-        result,
-        values,
-        positions,
-        conclusion: conclusion ?? '',
-      });
+      await downloadPDF(ID);
       appendLog('PDF descargado correctamente.', 'success');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Error desconocido';

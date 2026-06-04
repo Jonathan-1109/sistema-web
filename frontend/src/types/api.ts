@@ -22,6 +22,7 @@ export interface TransportIterationLog {
 export type TransportLog = Record<string, TransportIterationLog>;
 
 export interface ChainResponse {
+  id: string;
   message: string;
   log: TransportLog | null;
   values: number[] | null;
@@ -44,6 +45,7 @@ export interface HungarianStepLog {
 export type AssignmentLog = Record<string, HungarianStepLog>;
 
 export interface ManagementResponse {
+  id: string;
   message: string;
   log: AssignmentLog | null;
   values: number[] | null;
@@ -51,42 +53,15 @@ export interface ManagementResponse {
   result: number | null;
 }
 
-export interface GroqTransportPayload {
-  method: TransportMethod;
+export interface GroqPayload {
   origins: string[];
   destinations: string[];
   extraContext?: string;
-  matrix: number[][];
-  offers: number[];
-  demands: number[];
-  balanced: boolean;
-  log: TransportLog;
-  result: number;
-  values: number[];
-}
-
-export interface GroqHungarianPayload {
-  origins: string[];
-  destinations: string[];
-  extraContext?: string;
-  matrix: number[][];
-  log: AssignmentLog;
-  result: number;
-  values: number[];
-  positions: number[][];
 }
 
 export interface GroqResponse {
   message: string;
   conclusionGroq: string | null;
-}
-
-export interface TransportPdfPayload extends GroqTransportPayload {
-  conclusion: string;
-}
-
-export interface HungarianPdfPayload extends GroqHungarianPayload {
-  conclusion: string;
 }
 
 export interface ApiErrorBody {

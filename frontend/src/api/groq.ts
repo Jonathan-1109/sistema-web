@@ -1,18 +1,9 @@
 import { apiPost } from '@/api/client';
 import type {
-  GroqHungarianPayload,
   GroqResponse,
-  GroqTransportPayload,
+  GroqPayload,
 } from '@/types/api';
 
-export function requestTransportConclusion(
-  payload: GroqTransportPayload,
-): Promise<GroqResponse> {
-  return apiPost<GroqResponse, GroqTransportPayload>('/groq/', payload);
-}
-
-export function requestHungarianConclusion(
-  payload: GroqHungarianPayload,
-): Promise<GroqResponse> {
-  return apiPost<GroqResponse, GroqHungarianPayload>('/groq/hungarian', payload);
+export function requestConclusion(payload: GroqPayload, id: string): Promise<GroqResponse> {
+  return apiPost<GroqResponse, GroqPayload>(`/groq/${id}`, payload);
 }

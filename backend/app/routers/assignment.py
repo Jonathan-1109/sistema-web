@@ -30,7 +30,6 @@ async def hungarian(mng: Management, redis: Redis = Depends(get_redis)):
 
         await redis.hset(id, mapping=sr)
         await redis.expire(id, 3600)
-
         response = ResponseManagement(
           message="Ejercicio resuelto", 
           id=id,

@@ -39,14 +39,12 @@ export async function apiPost<TResponse, TBody>(
   return response.json() as Promise<TResponse>;
 }
 
-export async function apiPostBlob<TBody>(
+export async function apiPostBlob(
   path: string,
-  body: TBody,
 ): Promise<{ blob: Blob; filename: string }> {
   const response = await fetch(`${BASE}${path}`, {
-    method: 'POST',
+    method: 'GET',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
   });
 
   if (!response.ok) {

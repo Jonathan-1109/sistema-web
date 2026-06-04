@@ -1,6 +1,4 @@
 from enum import Enum
-from ..utils.validators.errors import check_orgDes
-from pydantic import model_validator
 from pydantic import BaseModel
 
 class ValidMethods(str, Enum):
@@ -22,8 +20,6 @@ class Message(BaseModel):
     origins: str | list[str]
     destinations: str | list[str]
     extraContext: str | None = None
-
-    _check_orgDes = model_validator(mode="after")(check_orgDes)
 
 class AnswerGroq(BaseModel):
     message: str

@@ -268,12 +268,12 @@
 
     {% if log %}
         {% for step_key, step_data in log.items() %}
-            {% if step_key != 'final' %}
+            {% if step_key != 'final_step' %}
             <div class="step-block">
                 <div class="step-header">
                     {% if step_key == 'step1' %} Paso 1: Reducción por Filas (Restar Mínimos)
                     {% elif step_key == 'step2' %} Paso 2: Reducción por Columnas (Restar Mínimos)
-                    {% else %} Iteración / Prueba de Cobertura ({{ step_key }})
+                    {% else %} Paso {{ step_key.replace("step","")}}:  Prueba de cobertura
                     {% endif %}
                 </div>
 
@@ -329,17 +329,17 @@
             <thead>
                 <tr>
                     <th style="text-transform: capitalize;"> Origen / Destino</th>
-                    {% for j in range(log.final.matrix[0]|length) %}
+                    {% for j in range(log.final_step.matrix[0]|length) %}
                         <th>Destino {{ j + 1 }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(log.final.matrix|length) %}
+                {% for i in range(log.final_step.matrix|length) %}
                 {% set row_idx = loop.index0 %}
                 <tr>
                     <td style="font-weight: bold; background-color: #edf2f7; text-transform: capitalize;">Origen {{ row_idx + 1 }}</td>
-                    {% for j in range(log.final.matrix[i]|length) %}
+                    {% for j in range(log.final_step.matrix[i]|length) %}
                         {% set col_idx = loop.index0 %}
                         
                         {% set ns = namespace(is_assigned=false, assigned_value="") %}
@@ -354,7 +354,7 @@
                         {% endif %}
 
                         <td class="{% if ns.is_assigned %}assigned-cell{% endif %}">
-                            {{ log.final.matrix[i][j] }}
+                            {{ log.final_step.matrix[i][j] }}
                             {% if ns.is_assigned %}
                                 <div style="font-size: 8pt; color: #234e52; font-weight: bold; margin-top: 4px;">
                                     Asignado (Valor: {{ ns.assigned_value }})

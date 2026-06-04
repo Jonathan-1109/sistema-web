@@ -312,7 +312,7 @@
     {% if log %} 
         {% for iter_name, iter_data in log.items() %} 
         <div class="step-block">
-            <div class="step-header">{{ iter_name }}</div> 
+            <div class="step-header">Iteración {{ iter_name.replace("iter","") }}</div> 
             
             <div class="step-meta">
                 <strong>Costo Mínimo Identificado:</strong> ${{ iter_data.minimun }} | 

@@ -50,7 +50,7 @@ class hungarian_method:
         
         self._assignment()
         self.result = sum(self.values)
-        self.log["final"] = {"matrix": self.matrix}
+        self.log[f"final_step"] = {"matrix": self.matrix}
 
     def _cover_zeros(self, rows_covers, cols_covers):
         n = len(self.matrix)
@@ -106,6 +106,6 @@ class hungarian_method:
                     cols[i] = True
 
     def update_log(self, n:int, rc: list[bool], cc: list[bool]):
-        key = f"iter{n+1}"
+        key = f"step{n+3}"
         dictLog = {key:{"matrix": [fila[:] for fila in self.matrix], "rowsCovers": rc, "colsCovers": cc}}
         self.log.update(dictLog)

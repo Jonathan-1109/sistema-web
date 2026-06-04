@@ -74,13 +74,12 @@ export function AssignmentTimeline({
       </p>
     );
   }
-
-  const keys = orderedLogKeys(log);
+  let keys = orderedLogKeys(log);
+  keys.push(keys.shift()!);
   let stepCounter = 0;
 
   return (
     <div className="space-y-3">
-      {/* Matriz original */}
       <details className="panel group" open>
         <summary className="px-4 py-3 cursor-pointer font-medium text-ui-base text-ink
           hover:text-ink list-none">
@@ -91,16 +90,15 @@ export function AssignmentTimeline({
         </div>
       </details>
 
-      {/* Pasos del algoritmo */}
       {keys.map((key) => {
         const step = log[key];
         if (!step?.matrix) return null;
 
         return (
+
           <details
             key={key}
             className="panel group"
-            open={key === 'final'}
           >
             <summary className="px-4 py-3 cursor-pointer font-medium text-ui-base text-ink
               hover:text-ink list-none flex items-center justify-between">
@@ -116,6 +114,7 @@ export function AssignmentTimeline({
             </div>
           </details>
         );
+
       })}
 
       <details className="panel group" open>

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
-import { requestTransportConclusion } from '@/api/groq';
-import { downloadTransportPdf } from '@/api/pdf';
+import { requestConclusion } from '@/api/groq';
+import { downloadPDF } from '@/api/pdf';
 import { solveTransport } from '@/api/transport';
 import {
   clampDimension,
@@ -93,6 +93,7 @@ export function useTransportSolver(): TransportSolverState {
   const [solutionLog, setSolutionLog] = useState<TransportLog | null>(null);
   const [balanced, setBalanced] = useState<boolean | null>(null);
   const [conclusion, setConclusion] = useState<string | null>(null);
+  const [ID, setID] = useState<string>("");
 
   const appendLog = useCallback((message: string, tone: LogEntry['tone'] = 'neutral') => {
     setLogs((prev) => [...prev, createLog(message, tone)]);
@@ -161,6 +162,7 @@ export function useTransportSolver(): TransportSolverState {
       setSolutionLog(response.log);
       setBalanced(response.balanced);
       setStep('resultado');
+      setID(response.id)
       appendLog(`Costo total: ${response.result ?? '—'}`, 'success');
 
       if (response.balanced === false) {
@@ -171,19 +173,11 @@ export function useTransportSolver(): TransportSolverState {
         setAiLoading(true);
         appendLog('Generando conclusión con Groq…', 'ai');
         try {
-          const groq = await requestTransportConclusion({
-            method,
+          const groq = await requestConclusion({
             origins: originLabels,
             destinations: destinationLabels,
             extraContext: extraContext || undefined,
-            matrix,
-            offers,
-            demands,
-            balanced: response.balanced ?? balance.isBalanced,
-            log: response.log,
-            result: response.result,
-            values: response.values,
-          });
+          }, ID);
           setConclusion(groq.conclusionGroq);
           setStep('resultado');
           appendLog('Conclusión generada.', 'ai');
@@ -220,19 +214,11 @@ export function useTransportSolver(): TransportSolverState {
     appendLog('Solicitando conclusión analítica…', 'ai');
 
     try {
-      const groq = await requestTransportConclusion({
-        method,
+      const groq = await requestConclusion({
         origins: originLabels,
         destinations: destinationLabels,
         extraContext: extraContext || undefined,
-        matrix,
-        offers,
-        demands,
-        balanced: balanced ?? balance.isBalanced,
-        log: solutionLog,
-        result,
-        values,
-      });
+      }, ID);
       setConclusion(groq.conclusionGroq);
       setStep('resultado');
       appendLog('Conclusión generada.', 'ai');
@@ -277,20 +263,7 @@ export function useTransportSolver(): TransportSolverState {
         result,
         values,
         conclusion ?? '',)
-      await downloadTransportPdf({
-        method,
-        origins: originLabels,
-        destinations: destinationLabels,
-        extraContext: extraContext || undefined,
-        matrix,
-        offers,
-        demands,
-        balanced: balanced ?? balance.isBalanced,
-        log: solutionLog,
-        result,
-        values,
-        conclusion: conclusion ?? '',
-      });
+      await downloadPDF(ID);
       appendLog('PDF descargado correctamente.', 'success');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Error desconocido';
