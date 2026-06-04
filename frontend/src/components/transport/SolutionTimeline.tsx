@@ -29,7 +29,6 @@ export function SolutionTimeline({
 
   return (
     <div className="space-y-4">
-      {/* Horizontal scrubber — asymmetric timeline */}
       <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
         {keys.map((key, index) => (
           <button

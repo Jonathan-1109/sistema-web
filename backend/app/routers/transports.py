@@ -1,4 +1,9 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
+from redis.asyncio import Redis
+from ..db.storage import get_redis
+from uuid import uuid4
+from ..utils.validators.verify import serialize, get_name
+
 from ..schemas.chain import Chain, ResponseChain
 from ..schemas.base import ValidMethods
 from ..commands.transport.minimun_cost import minimun_cost_method
@@ -8,8 +13,8 @@ from ..commands.transport.vogel import vogel_approximation_method
 router = APIRouter(prefix="/transport")
     
 @router.post("/{method}")
-async def methods_operations(method: ValidMethods, chain: Chain):
-    matrix, demands, offers = chain.matrix, chain.demands, chain.offers
+async def methods_operations(method: ValidMethods, chain: Chain, redis: Redis = Depends(get_redis)):
+    matrix, demands, offers, balanced = chain.matrix, chain.demands, chain.offers, chain.balanced
     mc = None
 
     try:   
@@ -28,17 +33,35 @@ async def methods_operations(method: ValidMethods, chain: Chain):
 
             case _:
               raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="El metodo buscado es invalido")
-  
+
+        id = str(uuid4())
+
+        values = {
+          "method": get_name(method.value), 
+          "matrix": mc.clone_matrix, 
+          "balanced": balanced, 
+          "offers": mc.clone_offers, 
+          "demands": mc.clone_demands,
+          "log": mc.log, 
+          "values": mc.values, 
+          "result": mc.result
+        }
+        
+        sr = serialize(values)
+
+        await redis.hset(id, mapping=sr)
+        await redis.expire(id, 3600)
+
         response = ResponseChain(
           message="Ejercicio resuelto", 
+          id=id,
           log=mc.log,
           values=mc.values,
           result=mc.result,
-          balanced=chain.balanced
+          balanced=balanced
         ).model_dump()
 
         return response
     
     except ValueError:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Ha habido un error en el servidor al realizar la operación")
-

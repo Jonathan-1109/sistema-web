@@ -47,17 +47,19 @@ export function ConclusionPanel({
   if (!text) return null;
 
   return (
-    <article className="panel p-6 relative overflow-hidden animate-fade-up">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-violet/8 rounded-full -translate-y-1/2 translate-x-1/2" />
-      <header className="flex items-center gap-2 mb-4">
-        <span className="w-2 h-2 rounded-full bg-violet animate-pulse-soft" />
-        <h3 className="font-mono text-xs text-violet uppercase tracking-widest">
-          Conclusión analítica
-        </h3>
-      </header>
-      <div className="prose-sm text-ink-soft leading-relaxed whitespace-pre-wrap font-sans text-[15px]">
-        {text}
-      </div>
-    </article>
+  <article className="panel p-6 relative overflow-hidden animate-fade-up h-[400px] max-h-[400px] flex flex-col">
+    <div className="absolute top-0 right-0 w-32 h-32 bg-violet/8 rounded-full -translate-y-1/2 translate-x-1/2" />
+    
+    <header className="flex items-center gap-2 mb-4 shrink-0">
+      <span className="w-2 h-2 rounded-full bg-violet animate-pulse-soft" />
+      <h3 className="font-mono text-xs text-violet uppercase tracking-widest">
+        Conclusión analítica
+      </h3>
+    </header>
+
+    <div className="flex-1 min-h-0 prose-sm text-ink-soft leading-relaxed whitespace-pre-wrap font-sans text-[15px] overflow-y-auto pr-2 custom-scrollbar scrollbar-thin scrollbar-thumb-violet/20 scrollbar-track-transparent">
+      {text.replaceAll("*","")}
+    </div>
+  </article>
   );
 }

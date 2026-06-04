@@ -342,10 +342,8 @@
                     {% for j in range(log.final.matrix[i]|length) %}
                         {% set col_idx = loop.index0 %}
                         
-                        {# Inicialización de estados para la celda actual (row_idx, col_idx) #}
                         {% set ns = namespace(is_assigned=false, assigned_value="") %}
                         
-                        {# Bucle de emparejamiento con el arreglo de posiciones #}
                         {% if positions is defined and values is defined %}
                             {% for pos in positions %}
                                 {% if pos[0] == row_idx and pos[1] == col_idx %}
@@ -370,17 +368,16 @@
         </table>
     </div>
 
-    <h2>4. Conclusión de la Asignación</h2>
-    <div class="conclusion-box">
-        <div style="font-weight: bold; font-size: 12pt; color: #22543d; margin-bottom: 8px;">Resumen Ejecutivo</div>
-        
-        {% if conclusion %}
-            <p style="margin: 0; color: #2d3748; white-space: pre-line;">{{ conclusion }}</p>
-        {% endif %}
-        
-        <div class="result-highlight">
-            (Resultado Óptimo Global): {{ result }}
+    {% if conclusion %}
+        <h2>4. Conclusión de la Asignación</h2>
+        <div class="conclusion-box">
+            <div style="font-weight: bold; font-size: 12pt; color: #22543d; margin-bottom: 8px;">Resumen Ejecutivo</div>
+                <p style="margin: 0; color: #2d3748; white-space: pre-line;">{{ conclusion }}</p>
         </div>
+    {% endif %}
+        
+    <div class="result-highlight">
+        (Resultado Óptimo Global): {{ result }}
     </div>
 
 </body>

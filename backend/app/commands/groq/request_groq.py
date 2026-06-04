@@ -1,24 +1,12 @@
 import os
 from groq import Groq
 from ...utils.groq_conclusion import groq_conclusion
+from ...utils.validators.verify import get_name
 
 class request_groq:
     def __init__(self):
         groqKey = os.getenv("GROQ_API_KEY", "")
         self.client = Groq(api_key=groqKey)
-
-    def _method_name(self, method: str) -> str:
-        match method:
-            case "costo_minimo":
-                return "Costo minimo"
-            case "esquina_noroeste":
-                return "Esquina noroeste"
-            case "vogel":
-                return "Aproximación de vogel"
-            case "hungaro":
-                return "Método húngaro"
-            case _:
-                return method.capitalize()
 
     def groq_prompt(
         self, 
@@ -35,8 +23,8 @@ class request_groq:
         demands: list[float] | None = None,
         positions: list[list[int]] | None = None
     ) -> str | None:
-
-        method_value = self._method_name(method)
+                
+        method_value = get_name(method)
         is_hungarian = method == "hungaro"
 
         datos_problema = f"""DATOS DEL PROBLEMA:
@@ -81,3 +69,5 @@ class request_groq:
         4. **Analisis**: Cuellos de botella, riesgos logísticos y balances de carga de trabajo según los valores.{contexto_adicional}"""
 
         return groq_conclusion(self.client, user_content)
+    
+rg = request_groq()

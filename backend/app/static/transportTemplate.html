@@ -372,16 +372,20 @@
         <p>No se encontraron registros de iteraciones analíticas.</p>
     {% endif %}
 
-    <h2>3. Conclusión Financiera y Operativa</h2>
-    <div class="conclusion-box">
-        <div style="font-weight: bold; font-size: 12pt; color: #2b6cb0; margin-bottom: 10px;">Análisis de Resultados</div>
-        <div class="preserve-lines" style="color: #2d3748;">
-            {{ conclusion }}
+    {% if conclusion %} 
+
+        <h2>3. Conclusión Financiera y Operativa</h2>
+        <div class="conclusion-box">
+            <div style="font-weight: bold; font-size: 12pt; color: #2b6cb0; margin-bottom: 10px;">Análisis de Resultados</div>
+            <div class="preserve-lines" style="color: #2d3748;">
+                {{ conclusion }}
+            </div>
+            
         </div>
-        
-        <div class="result-highlight">
-            Costo Mínimo Total Evaluado: ${{ "{:,.2f}".format(result) }}
-        </div>
+    {% endif %}
+
+    <div class="result-highlight">
+        Costo Mínimo Total Evaluado: ${{ "{:,.2f}".format(result) }}
     </div>
 
 </body>

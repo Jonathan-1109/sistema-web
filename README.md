@@ -30,7 +30,10 @@ pip install -r requirements.txt
 #### 3. Generar una apikey 
 Crea y obten una apikey en [GroqCloud](https://console.groq.com/) y crea un archivo .env en el backend, usando de ejemplo el .env.example
 
-#### 4. Iniciar el servidor
+#### 4. Redis
+Para usar el almacenamiento temporal, es necesario instalar redis [Redis](https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/)
+
+#### 5. Iniciar el servidor
 ```bash
 fastapi dev app/main.py
 ```

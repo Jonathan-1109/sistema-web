@@ -4,9 +4,12 @@ class transport:
         self.matrix = matrix
         self.offers = offers
         self.demands = demands
+        self.clone_matrix = [fila[:] for fila in matrix]
+        self.clone_demands = demands[:]
+        self.clone_offers = offers[:]
 
         self.values = []
-        self.result = 0
+        self.result = 0.0
         self.log = {}
 
     def save_matrix(self, value_of_dem: float, value: float, x: int, y: int, n: int) -> None :

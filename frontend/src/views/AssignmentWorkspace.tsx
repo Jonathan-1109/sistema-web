@@ -144,22 +144,12 @@ export function AssignmentWorkspace({ solver, onBack }: AssignmentWorkspaceProps
             <h2 className="font-display text-xl font-semibold text-ink mb-4">
               Evolución del algoritmo
             </h2>
-            <AssignmentTimeline log={solver.solutionLog} />
-          </section>
-
-          <section className="panel p-5 lg:p-6">
-            <h2 className="font-display text-xl font-semibold text-ink mb-4">
-              Matriz con asignación
-            </h2>
-            <SquareMatrixEditor
-              size={solver.size}
-              matrix={solver.matrix}
+            <AssignmentTimeline
+              log={solver.solutionLog}
+              originalMatrix={solver.matrix}
+              positions={solver.positions}
               workerLabels={solver.workerLabels}
               taskLabels={solver.taskLabels}
-              positions={solver.positions}
-              onCellChange={solver.updateCell}
-              onWorkerLabelChange={solver.updateWorkerLabel}
-              onTaskLabelChange={solver.updateTaskLabel}
             />
           </section>
 
