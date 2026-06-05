@@ -1,10 +1,10 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from redis.asyncio import Redis, RedisError
+
 from ..db.storage import get_redis
 from ..utils.validators.verify import deserialize
-
-from ..utils.createPDF import create_pdf
+from ..utils.methods.createPDF import create_pdf
 
 router_pdf = APIRouter(prefix="/pdf")
 

@@ -18,7 +18,7 @@ async def hungarian(mng: Management, redis: Redis = Depends(get_redis)):
         mc.resolve_hungarian()
 
         id = str(uuid4())
-        values = {
+        values_to_send = {
           "method": "hungaro",
           "matrix": mc.clone, 
           "positions": mc.pos,
@@ -26,18 +26,17 @@ async def hungarian(mng: Management, redis: Redis = Depends(get_redis)):
           "values": mc.values, 
           "result": mc.result
         }
-        sr = serialize(values)
+        sr = serialize(values_to_send)
 
         await redis.hset(id, mapping=sr)
         await redis.expire(id, 3600)
         response = ResponseManagement(
           message="Ejercicio resuelto", 
           id=id,
-          log=mc.log,
-          values=mc.values, 
-          positions=mc.pos, 
-          result=mc.result
+          **values_to_send
         ).model_dump()
+
+        print(response)
 
         return response
     

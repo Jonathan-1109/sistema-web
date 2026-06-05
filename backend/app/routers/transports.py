@@ -36,7 +36,7 @@ async def methods_operations(method: ValidMethods, chain: Chain, redis: Redis = 
 
         id = str(uuid4())
 
-        values = {
+        values_to_send = {
           "method": get_name(method.value), 
           "matrix": mc.clone_matrix, 
           "balanced": balanced, 
@@ -47,7 +47,7 @@ async def methods_operations(method: ValidMethods, chain: Chain, redis: Redis = 
           "result": mc.result
         }
         
-        sr = serialize(values)
+        sr = serialize(values_to_send)
 
         await redis.hset(id, mapping=sr)
         await redis.expire(id, 3600)
@@ -55,10 +55,7 @@ async def methods_operations(method: ValidMethods, chain: Chain, redis: Redis = 
         response = ResponseChain(
           message="Ejercicio resuelto", 
           id=id,
-          log=mc.log,
-          values=mc.values,
-          result=mc.result,
-          balanced=balanced
+          **values_to_send
         ).model_dump()
 
         return response

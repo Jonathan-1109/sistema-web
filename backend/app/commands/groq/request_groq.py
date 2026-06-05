@@ -1,6 +1,6 @@
 import os
 from groq import Groq
-from ...utils.groq_conclusion import groq_conclusion
+from ...utils.methods.groq_conclusion import groq_conclusion
 from ...utils.validators.verify import get_name
 
 class request_groq:
