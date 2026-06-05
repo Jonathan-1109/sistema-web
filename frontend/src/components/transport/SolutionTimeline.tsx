@@ -26,6 +26,9 @@ export function SolutionTimeline({
   const keys = orderedLogKeys(log);
   const currentKey = activeKey ?? keys[keys.length - 1] ?? null;
   const iteration = currentKey ? log[currentKey] : null;
+  const matrixLength = iteration?.matrix[0]?.length ?? 0;
+
+  const cond = matrixLength > destinationLabels.slice(0, matrixLength).length
 
   return (
     <div className="space-y-4">
@@ -63,11 +66,16 @@ export function SolutionTimeline({
         <thead>
           <tr>
             <th />
-            {destinationLabels.slice(0, iteration.matrix[0]?.length ?? 0).map((d, j) => (
+            {destinationLabels.slice(0, matrixLength).map((d, j) => (
               <th key={j} className="text-[15px] text-ink font-normal px-2 py-1">
                 {d}
               </th>
             ))}
+            {cond && (
+              <th key={"extra"} className="text-[15px] text-ink font-normal px-2 py-1">
+                {"destino extra"}
+              </th>
+            )}
             <th className="text-[15px] text-ink font-normal px-2 py-1">
               Ofertas
             </th>
@@ -77,11 +85,10 @@ export function SolutionTimeline({
           {iteration.matrix.map((row, i) => (
             <tr key={i}>
               <td className="text-[15px] text-ink pr-2">
-                {originLabels[i] ?? `Origen ${i + 1}`}
+                {originLabels[i] ?? `Origen extra`}
               </td>
               {row.map((cell, j) => {
                 const isAssign = i === iteration.y && j === iteration.x;
-                console.log(i, j, iteration.x,  iteration.y)
                 return (
                   <td
                     key={j}
